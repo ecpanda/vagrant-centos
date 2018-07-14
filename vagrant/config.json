@@ -1,0 +1,78 @@
+{
+    "ip": "172.18.6.6",
+    "memory": 2048,
+    "cpus": 2,
+    "box": "centos/7",
+    "name": "centos-vagrant",
+    "provider": "virtualbox",
+    "authorize": "~/.ssh/id_rsa.pub",
+    "key": "~/.ssh/id_rsa",
+    /**
+     * public fold within your project root path on the host machine
+     * will map to /var/www/public within the guest machine.
+     * Use options to specify the owner, group and write permission of the shared fold in guest machine.
+     */
+    "folders": [
+        {
+            "map": "./app",
+            "to": "/var/www/app",
+            "options": {
+                "owner": "vagrant", 
+                "group": "vagrant",
+                "mount_options": [
+                     "dmode=755",
+                     "fmode=755"
+                ]
+            }
+        },
+        {
+            "map": "../elasticsearch",
+            "to": "/var/www/elasticsearch",
+            "options": {
+                "owner": "vagrant", 
+                "group": "vagrant",
+                "mount_options": [
+                     "dmode=777",
+                     "fmode=777"
+                ]
+            }
+        },
+        {
+            "map": "./vagrant",
+            "to": "/home/vagrant/vm",
+            "options": {
+                "owner": "vagrant",
+                "group": "vagrant",
+                "mount_options": [
+                     "dmode=755",
+                     "fmode=755"
+                ]
+            }
+        }
+    ],
+    /**
+     * Set the virutal host and root directory for the site
+     */
+    
+    "sites": [
+        {
+            "map": "centos.me",
+            "to": "/var/www/app"
+        },
+        {
+            "map": "elasticsearch.me",
+            "to": "/var/www/elasticsearch/public"
+        }
+    ],
+    
+    /**
+     * Install the nginx, php7, mysql, redis in the guest machine.
+     * If you want to install other dependencies, please put a bash script in the provision fold. 
+     * Then add the script file name in the provisions list.
+     */
+    "provisions": [
+        "install-nginx",
+        "install-mysql",
+        "compile-php7"
+    ]
+}
